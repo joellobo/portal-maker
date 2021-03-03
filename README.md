@@ -2,7 +2,7 @@
 Portal Maker
 
 '''
-Python
+Python 3
 Dependencies:
 '''
 
