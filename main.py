@@ -1,40 +1,46 @@
+import os
 import feedparser
 from slugify import slugify
 
-folder = "./site"
+PORTAL = "site"
+INDEX = "index.html"
 
-file1 = open('sources.txt', 'r')
-Lines = file1.readlines()
+# ler os links dos feeds
+feed_sources = open('sources.txt', 'r')
+Lines = feed_sources.readlines()
 
 count = 0
 for line in Lines:
-  count += 1
+    count += 1
 
-  NewsFeed = feedparser.parse(line.strip())
-  
-  total = len(NewsFeed['entries'])
-  
-  for i in range(1, total):
-    entry = NewsFeed.entries[i]
-    r = slugify(entry.link)
-    f = open(folder + "/" + r + '.html', "a")
-    f.write(entry.published + "\n" + entry.summary)
-    
-    
-    # Adicionar tags google
-    
-    # adicionar tag manager google
-    f.close()
+    feed = feedparser.parse(line.strip())
 
-    # get the feed
-    #print()
-    #print("******")
-    #print()
-    #print("------News Link--------")
-    #print(entry.link)
+    total = len(feed['entries'])
 
-  # convert to html
+    for i in range(1, total):
+        entry = feed.entries[i]
 
+        # colocar o ultimo item como destaque
+        # TODO
 
+        r = slugify(entry.link)
 
+        url = "./" + PORTAL + "/" + r + '.html'
 
+        # atualiza index.html
+        index = open("./" + PORTAL + "/" + INDEX, "a")
+        index.write("<p> <a href='./" + r + '.html' + "'>" + entry.title + "</a></p>")
+        index.close()
+
+        if os.path.exists(url):
+            os.remove(url)
+
+        # cria o arquivo da noticia  
+        f = open(url, "w+")
+        f.write("<br>" + entry.published + "<br>" + entry.summary + "<br>" + entry.description)
+
+        # Adicionar tags google
+
+        # adicionar tag manager google
+
+        f.close()
