@@ -1,6 +1,7 @@
 import os
 import feedparser
 from slugify import slugify
+from translate import Translator
 
 PORTAL = "site"
 INDEX = "index.html"
@@ -20,8 +21,16 @@ for line in Lines:
     for i in range(1, total):
         entry = feed.entries[i]
 
-        # colocar o ultimo item como destaque
+        conf = Translator(from_lang='pt-br', to_lang='english')
+
+        noticia = {
+            "titulo": conf.translate(entry.title),
+            "resumo": conf.translate(entry.summary),
+            "materia": conf.translate(entry.description)
+        }
+
         # TODO
+        # colocar o ultimo item como destaque
 
         r = slugify(entry.link)
 
@@ -29,15 +38,20 @@ for line in Lines:
 
         # atualiza index.html
         index = open("./" + PORTAL + "/" + INDEX, "a")
-        index.write("<p> <a href='./" + r + '.html' + "'>" + entry.title + "</a></p>")
+        index.write("<p> <a href='./" + r + '.html' +
+                    "'>" + noticia["titulo"] + "</a></p>")
         index.close()
 
         if os.path.exists(url):
             os.remove(url)
 
-        # cria o arquivo da noticia  
+        # cria o arquivo da noticia
         f = open(url, "w+")
-        f.write("<br>" + entry.published + "<br>" + entry.summary + "<br>" + entry.description)
+
+        # traduzir
+
+        f.write("<br>" + entry.published + "<br>" +
+                noticia["resumo"] + "<br>" + noticia["materia"])
 
         # Adicionar tags google
 
