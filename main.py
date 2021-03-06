@@ -1,7 +1,7 @@
 import os
 import feedparser
 from slugify import slugify
-from translate import Translator
+from google_trans_new import google_translator
 
 PORTAL = "site"
 INDEX = "index.html"
@@ -21,12 +21,12 @@ for line in Lines:
     for i in range(1, total):
         entry = feed.entries[i]
 
-        conf = Translator(from_lang='pt-br', to_lang='english')
+        translator = google_translator() 
 
         noticia = {
-            "titulo": conf.translate(entry.title),
-            "resumo": conf.translate(entry.summary),
-            "materia": conf.translate(entry.description)
+            "titulo": translator.translate(entry.title,lang_tgt='en'),
+            "resumo": translator.translate(entry.summary,lang_tgt='en'),
+            "materia": translator.translate(entry.description,lang_tgt='en')
         }
 
         # TODO
