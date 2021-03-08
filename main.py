@@ -1,4 +1,7 @@
 import os
+import sys
+import logging
+
 import feedparser
 from slugify import slugify
 from google_trans_new import google_translator
@@ -6,62 +9,73 @@ from google_trans_new import google_translator
 PORTAL = "site"
 INDEX = "index.html"
 
-# ler os links dos feeds
-feed_sources = open('sources.txt', 'r')
-Lines = feed_sources.readlines()
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-count = 0
-for line in Lines:
-    count += 1
+def main():
+    update_site()    
 
-    feed = feedparser.parse(line.strip())
+def update_site():
+    logging.debug("executando metodo update_site")
 
-    total = len(feed['entries'])
+    # ler os links dos feeds
+    feed_sources = open('sources.txt', 'r')
+    Lines = feed_sources.readlines()
 
-    for i in range(1, total):
-        entry = feed.entries[i]
+    count = 0
+    for line in Lines:
+        count += 1
 
-        translator = google_translator() 
+        feed = feedparser.parse(line.strip())
 
-        noticia = {
-            "titulo": translator.translate(entry.title,lang_tgt='en'),
-            "resumo": translator.translate(entry.summary,lang_tgt='en'),
-            "materia": translator.translate(entry.description,lang_tgt='en')
-        }
+        total = len(feed['entries'])
 
-        # TODO
-        # colocar o ultimo item como destaque
+        for i in range(1, total):
+            entry = feed.entries[i]
 
-        r = slugify(entry.link)
+            translator = google_translator() 
 
-        url = "./" + PORTAL + "/" + r + '.html'
+            noticia = {
+                "titulo": translator.translate(entry.title,lang_tgt='en'),
+                "resumo": translator.translate(entry.summary,lang_tgt='en'),
+                "materia": translator.translate(entry.description,lang_tgt='en')
+            }
 
-        # atualiza index.html
-        index = open("./" + PORTAL + "/" + INDEX, "a")
-        index.write("<p> <a href='./" + r + '.html' +
-                    "'>" + noticia["titulo"] + "</a></p>")
-        index.close()
+            # TODO
+            # colocar o ultimo item como destaque
 
-        # gerar a patir de um template    
-        # TODO
+            r = slugify(entry.link)
 
-        if os.path.exists(url):
-            os.remove(url)
+            url = "./" + PORTAL + "/" + r + '.html'
 
-        # cria o arquivo da noticia
-        f = open(url, "w+")
+            # atualiza index.html
+            index = open("./" + PORTAL + "/" + INDEX, "a")
+            index.write("<p> <a href='./" + r + '.html' +
+                        "'>" + noticia["titulo"] + "</a></p>")
+            index.close()
 
-        f.write(noticia["titulo"] + "<br>" + entry.published + "<br>" +
-                noticia["resumo"] + "<br>" + noticia["materia"])
+            # gerar a patir de um template    
+            # TODO
 
-        # Adicionar tags google
+            if os.path.exists(url):
+                os.remove(url)
 
-        # adicionar tag manager google
+            # cria o arquivo da noticia
+            f = open(url, "w+")
 
-        f.close()
+            f.write(noticia["titulo"] + "<br>" + entry.published + "<br>" +
+                    noticia["resumo"] + "<br>" + noticia["materia"])
 
-        # upload s3 / digitalocean
-        # TODO
+            # Adicionar tags google
 
-        # Publicar nas redes sociais twitter/facebook/instagram
-        # TODO
+            # adicionar tag manager google
+
+            f.close()
+
+            # upload s3 / digitalocean
+            # TODO
+
+            # Publicar nas redes sociais twitter/facebook/instagram
+            # TODO
+
+if __name__ == '__main__':
+    main()
