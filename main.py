@@ -42,15 +42,16 @@ for line in Lines:
                     "'>" + noticia["titulo"] + "</a></p>")
         index.close()
 
+        # gerar a patir de um template    
+        # TODO
+
         if os.path.exists(url):
             os.remove(url)
 
         # cria o arquivo da noticia
         f = open(url, "w+")
 
-        # traduzir
-
-        f.write("<br>" + entry.published + "<br>" +
+        f.write(noticia["titulo"] + "<br>" + entry.published + "<br>" +
                 noticia["resumo"] + "<br>" + noticia["materia"])
 
         # Adicionar tags google
@@ -58,3 +59,9 @@ for line in Lines:
         # adicionar tag manager google
 
         f.close()
+
+        # upload s3 / digitalocean
+        # TODO
+
+        # Publicar nas redes sociais twitter/facebook/instagram
+        # TODO
