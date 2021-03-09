@@ -11,8 +11,10 @@ INDEX = "index.html"
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
+
 def main():
-    update_site()    
+    update_site()
+
 
 def update_site():
     logging.debug("executando metodo update_site")
@@ -32,12 +34,12 @@ def update_site():
         for i in range(1, total):
             entry = feed.entries[i]
 
-            translator = google_translator() 
+            translator = google_translator()
 
             noticia = {
-                "titulo": translator.translate(entry.title,lang_tgt='en'),
-                "resumo": translator.translate(entry.summary,lang_tgt='en'),
-                "materia": translator.translate(entry.description,lang_tgt='en')
+                "titulo": translator.translate(entry.title, lang_tgt='en'),
+                "resumo": translator.translate(entry.summary, lang_tgt='en'),
+                "materia": translator.translate(entry.description, lang_tgt='en')
             }
 
             # TODO
@@ -53,7 +55,7 @@ def update_site():
                         "'>" + noticia["titulo"] + "</a></p>")
             index.close()
 
-            # gerar a patir de um template    
+            # gerar a patir de um template
             # TODO
 
             if os.path.exists(url):
@@ -76,6 +78,7 @@ def update_site():
 
             # Publicar nas redes sociais twitter/facebook/instagram
             # TODO
+
 
 if __name__ == '__main__':
     main()
