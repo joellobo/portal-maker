@@ -42,8 +42,8 @@ def update_site():
                 "materia": translator.translate(entry.description, lang_tgt='en')
             }
 
-            # TODO
             # colocar o ultimo item como destaque
+            # TODO
 
             r = slugify(entry.link)
 
@@ -70,6 +70,8 @@ def update_site():
             # Adicionar tags google
 
             # adicionar tag manager google
+
+            # adicionar noticias relacionadas
 
             f.close()
 
