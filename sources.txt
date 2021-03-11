@@ -1,1 +1,2 @@
 feed:https://www.gazetaesportiva.com/times/flamengo/feed/
+https://www.ogol.com.br/rss/noticias.php

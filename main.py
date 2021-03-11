@@ -58,28 +58,28 @@ def update_site():
             # gerar a patir de um template
             # TODO
 
-            if os.path.exists(url):
-                os.remove(url)
+            if not os.path.exists(url):
+                #os.remove(url)
 
-            # cria o arquivo da noticia
-            f = open(url, "w+")
+                # cria o arquivo da noticia
+                f = open(url, "w+")
 
-            f.write(noticia["titulo"] + "<br>" + entry.published + "<br>" +
-                    noticia["resumo"] + "<br>" + noticia["materia"])
+                f.write(noticia["titulo"] + "<br>" + entry.published + "<br>" +
+                        noticia["resumo"] + "<br>" + noticia["materia"])
 
-            # Adicionar tags google
+                # Adicionar tags google
 
-            # adicionar tag manager google
+                # adicionar tag manager google
 
-            # adicionar noticias relacionadas
+                # adicionar noticias relacionadas
 
-            f.close()
+                f.close()
 
-            # upload s3 / digitalocean
-            # TODO
+                # upload s3 / digitalocean
+                # TODO
 
-            # Publicar nas redes sociais twitter/facebook/instagram
-            # TODO
+                # Publicar nas redes sociais twitter/facebook/instagram
+                # TODO
 
 
 if __name__ == '__main__':
